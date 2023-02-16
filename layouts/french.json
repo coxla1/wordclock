@@ -1,0 +1,55 @@
+{
+    "prefix": {
+        "it": {"word": "IL", "index": 132},
+        "is":  {"word": "EST", "index": 136},
+		"soon": {"word": "X", "index": 139},
+        "hour":  {"word": "HEURE", "index": 54},
+        "hours":  {"word": "HEURES", "index": 54},
+		"the": {"word": "LE", "index": 12},
+		"and": {"word": "ET", "index": 50}
+    },
+    "minutes": {
+		"oclock": {"word": "PILE", "index": 29},
+        "five": {"word": "CINQ", "index": 7},
+        "ten": {"word": "DIX", "index": 25},
+        "quarter": {"word": "QUART", "index": 3},
+        "twenty": {"word": "VINGT", "index": 17},
+		"half": {"word": "DEMIE", "index": 43},
+        "to": {"word": "MOINS", "index": 37},
+        "past": {"word": "X", "index": 140}
+    },
+	"subminutes": {
+		"one": {"word": "W", "index": 134},
+		"two": {"word": "F", "index": 119},
+		"three": {"word": "Y", "index": 2},
+		"four": {"word": "L", "index": 35}
+	},
+    "hours": {
+        "one": {"word": "UNE", "index": 105},
+        "two": {"word": "DEUX", "index": 115},
+        "three": {"word": "TROIS", "index": 122},
+        "four": {"word": "QUATRE", "index": 89},
+        "five": {"word": "CINQ", "index": 86},
+        "six": {"word": "SIX", "index": 69},
+        "seven": {"word": "SEPT", "index": 126},
+        "eight": {"word": "HUIT", "index": 76},
+        "nine": {"word": "NEUF", "index": 103},
+        "ten": {"word": "DIX", "index": 109},
+        "eleven": {"word": "ONZE", "index": 64},
+        "twelve": {"word": "X", "index": 141},
+        "midday": {"word": "MIDI", "index": 80},
+        "midnight": {"word": "MINUIT", "index": 96}
+    },
+    "day": {
+        "monday": {"word": "L", "index": 114},
+        "tuesday": {"word": "M", "index": 68},
+        "wednesday": {"word": "M", "index": 95},
+        "thursday": {"word": "J", "index": 34},
+        "friday": {"word": "V", "index": 11},
+        "saturday": {"word": "S", "index": 102},
+        "sunday": {"word": "D", "index": 14}
+    },
+    "others": {
+        "signature": {"word": "X", "index": 142}
+    }
+}

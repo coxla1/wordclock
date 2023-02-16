@@ -59,9 +59,15 @@ class Computer(AbstractDisplay):
             for words in layout[category]:
                 word = layout[category][words]["word"]
                 index = int(layout[category][words]["index"])
+                
+                add = 1
+                if (index // self.width) % 2 == 0:
+                    index += len(word) - 1
+                    add = -1
+                
                 for char in word:
                     self.words[index] = char
-                    index += 1
+                    index += add
 
         # Add random letters to empty slots
         if self.fill_empty:
@@ -84,7 +90,12 @@ class Computer(AbstractDisplay):
         for j in range(self.width):
             for i in range(self.height):
                 color = self.buffer[i][j] * self.brightness
-
+                
+                i2 = self.height - 1 - i
+                j2 = self.width - 1 - j
+                if i2 % 2 == 1:
+                    j2 = j
+                
                 # Draw background color and border
                 pygame.draw.rect(
                     self.surface,
@@ -99,7 +110,7 @@ class Computer(AbstractDisplay):
 
                 # Draw characters from words array
                 character = self.char_font.render(
-                    self.words[i * self.width + j], True, color
+                    self.words[i2 * self.width + j2], True, color
                 )
                 self.surface.blit(
                     character,
@@ -114,7 +125,7 @@ class Computer(AbstractDisplay):
                 # Draw index number of current character
                 if self.show_index:
                     index_as_img = self.index_font.render(
-                        str(i * self.width + j), True, WHITE
+                        str(i2 * self.width + j2), True, WHITE
                     )
                     self.surface.blit(
                         index_as_img,
