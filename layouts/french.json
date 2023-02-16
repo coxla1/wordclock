@@ -2,11 +2,7 @@
     "prefix": {
         "it": {"word": "IL", "index": 132},
         "is":  {"word": "EST", "index": 136},
-		"soon": {"word": "X", "index": 139},
-        "hour":  {"word": "HEURE", "index": 54},
-        "hours":  {"word": "HEURES", "index": 54},
-		"the": {"word": "LE", "index": 12},
-		"and": {"word": "ET", "index": 50}
+		"soon": {"word": "X", "index": 139}
     },
     "minutes": {
 		"oclock": {"word": "PILE", "index": 29},
@@ -16,14 +12,14 @@
         "twenty": {"word": "VINGT", "index": 17},
 		"half": {"word": "DEMIE", "index": 43},
         "to": {"word": "MOINS", "index": 37},
-        "past": {"word": "X", "index": 140}
-    },
-	"subminutes": {
+        "past": {"word": "X", "index": 140},
+		"the": {"word": "LE", "index": 12},
+		"and": {"word": "ET", "index": 50},
 		"one": {"word": "W", "index": 134},
 		"two": {"word": "F", "index": 119},
 		"three": {"word": "Y", "index": 2},
 		"four": {"word": "L", "index": 35}
-	},
+    },
     "hours": {
         "one": {"word": "UNE", "index": 105},
         "two": {"word": "DEUX", "index": 115},
@@ -38,7 +34,9 @@
         "eleven": {"word": "ONZE", "index": 64},
         "twelve": {"word": "X", "index": 141},
         "midday": {"word": "MIDI", "index": 80},
-        "midnight": {"word": "MINUIT", "index": 96}
+        "midnight": {"word": "MINUIT", "index": 96},
+        "hour":  {"word": "HEURE", "index": 55},
+        "hours":  {"word": "HEURES", "index": 54}
     },
     "day": {
         "monday": {"word": "L", "index": 114},
