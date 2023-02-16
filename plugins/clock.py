@@ -14,6 +14,7 @@ def indexes(entry):
     word = entry["word"]
     index = entry["index"]
     length = len(word)
+    
     return [*range(index, index + length)]
 
 
@@ -51,46 +52,56 @@ class ClockPlugin(AbstractPlugin):
         self.__construct_word_arrays()
 
     def __construct_word_arrays(self):
-        f = open("layouts/swedish3.json", encoding="utf-8")
+        f = open("layouts/french.json", encoding="utf-8")
         layout = json.load(f)
 
-        self.prefix = indexes(layout["prefix"]["she"]) + indexes(layout["prefix"]["is"])
+        self.prefix = indexes(layout["prefix"]["it"]) + indexes(layout["prefix"]["is"])
         self.soon = indexes(layout["prefix"]["soon"])
         self.signature = indexes(layout["others"]["signature"])
 
         self.minutes = [
-            [],
-            indexes(layout["minutes"]["five"]) + indexes(layout["minutes"]["past"]),
-            indexes(layout["minutes"]["ten"]) + indexes(layout["minutes"]["past"]),
-            indexes(layout["minutes"]["quarter"]) + indexes(layout["minutes"]["past"]),
-            indexes(layout["minutes"]["twenty"]) + indexes(layout["minutes"]["past"]),
-            indexes(layout["minutes"]["five"])
-            + indexes(layout["minutes"]["to"])
-            + indexes(layout["minutes"]["half"]),
+            indexes(layout["minutes"]["oclock"]),
+            indexes(layout["minutes"]["five"]),
+            indexes(layout["minutes"]["ten"]),
+            indexes(layout["minutes"]["and"]) + indexes(layout["minutes"]["quarter"]),
+            indexes(layout["minutes"]["twenty"]),
+            indexes(layout["minutes"]["twenty"]) + indexes(layout["minutes"]["five"]),
             indexes(layout["minutes"]["half"]),
-            indexes(layout["minutes"]["five"])
-            + indexes(layout["minutes"]["past"])
-            + indexes(layout["minutes"]["half"]),
-            indexes(layout["minutes"]["twenty"]) + indexes(layout["minutes"]["to"]),
-            indexes(layout["minutes"]["quarter"]) + indexes(layout["minutes"]["to"]),
-            indexes(layout["minutes"]["ten"]) + indexes(layout["minutes"]["to"]),
-            indexes(layout["minutes"]["five"]) + indexes(layout["minutes"]["to"]),
-            [],
+            indexes(layout["minutes"]["to"])
+            + indexes(layout["minutes"]["twenty"])
+            + indexes(layout["minutes"]["five"]),
+            indexes(layout["minutes"]["to"]) + indexes(layout["minutes"]["twenty"]),
+            indexes(layout["minutes"]["to"])
+            + indexes(layout["minutes"]["the"])
+            + indexes(layout["minutes"]["quarter"]),
+            indexes(layout["minutes"]["to"]) + indexes(layout["minutes"]["ten"]),
+            indexes(layout["minutes"]["to"]) + indexes(layout["minutes"]["five"]),
         ]
         self.hours = [
-            indexes(layout["hours"]["twelve"]),
-            indexes(layout["hours"]["one"]),
-            indexes(layout["hours"]["two"]),
-            indexes(layout["hours"]["three"]),
-            indexes(layout["hours"]["four"]),
-            indexes(layout["hours"]["five"]),
-            indexes(layout["hours"]["six"]),
-            indexes(layout["hours"]["seven"]),
-            indexes(layout["hours"]["eight"]),
-            indexes(layout["hours"]["nine"]),
-            indexes(layout["hours"]["ten"]),
-            indexes(layout["hours"]["eleven"]),
-            indexes(layout["hours"]["twelve"]),
+            indexes(layout["hours"]["midnight"]),
+            indexes(layout["hours"]["one"]) + indexes(layout["hours"]["hour"]),
+            indexes(layout["hours"]["two"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["three"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["four"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["five"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["six"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["seven"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["eight"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["nine"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["ten"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["eleven"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["midday"]),
+            indexes(layout["hours"]["one"]) + indexes(layout["hours"]["hour"]),
+            indexes(layout["hours"]["two"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["three"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["four"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["five"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["six"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["seven"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["eight"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["nine"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["ten"]) + indexes(layout["hours"]["hours"]),
+            indexes(layout["hours"]["eleven"]) + indexes(layout["hours"]["hours"]),
         ]
         self.weekdays = [
             indexes(layout["day"]["monday"]),
@@ -197,23 +208,23 @@ class ClockPlugin(AbstractPlugin):
     def __constructIndexes(self, hour, minute, second, weekday):
         """Get array of indexes which map with words to light up."""
         # Check if an hour should be added
-        additional_hour = 1 if (minute >= 24) else 0
+        additional_hour = 1 if (minute >= 35) else 0
 
-        hour_index = hour % 12 + additional_hour
-        minute_index = int(minute / 5)
+        hour_index = (hour + additional_hour) % 24
+        minute_index = (minute % 60) // 5
 
-        soon = []
-        if minute / 5 % 1 > 0.7:
-            minute_index += 1
-            soon = self.soon
+        # soon = []
+        # if minute / 5 % 1 > 0.7:
+        #     minute_index += 1
+        #     soon = self.soon
 
         return (
             self.prefix
             + self.minutes[minute_index]
             + self.hours[hour_index]
             + self.weekdays[weekday]
-            + soon
-            + self.signature
+            # + soon
+            # + self.signature
         )
 
     def __construct_buffer(self, hour, minute, second, weekday):
@@ -221,19 +232,14 @@ class ClockPlugin(AbstractPlugin):
         buffer = np.zeros((self.height, self.width, 3), dtype=np.uint8)
 
         led_indexes = self.__constructIndexes(hour, minute, second, weekday)
-
-        index = 0
-        for column in range(self.width):
-            for row in range(self.height):
+        
+        index = 0        
+        for row in range(self.height):
+            for column in range(self.width):
                 if index in led_indexes:
-                    if index in range(139, 144):
-                        buffer[column, row] = self.signature_color
-                    elif index in range(132, 139):
-                        buffer[column, row] = self.day_color
-                    else:
-                        buffer[column, row] = self.on_color
+                    buffer[row, column] = self.on_color
                 else:
-                    buffer[column, row] = self.off_color
+                    buffer[row, column] = self.off_color
 
                 index += 1
 

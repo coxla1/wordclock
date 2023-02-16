@@ -45,9 +45,7 @@ class Computer(AbstractDisplay):
         self.char_font = pygame.font.Font("fonts/D-DINExp-Bold.ttf", self.size)
 
         # Prepare word list
-        self.words = []
-        for i in range(self.width * self.height):
-            self.words.append("")
+        self.words = ["" for _ in range(self.width * self.height)]
 
         # Load layout
         layout = self.config.get("tidsram_display", "layout")
@@ -79,6 +77,7 @@ class Computer(AbstractDisplay):
         # Create the window
         self.surface = pygame.display.set_mode(self.window_size)
         pygame.display.set_caption("tidsram {}x{}".format(width, height))
+                
         self.show()
 
     def show(self, gamma=False):
@@ -89,12 +88,12 @@ class Computer(AbstractDisplay):
         index = 0
         for j in range(self.width):
             for i in range(self.height):
-                color = self.buffer[i][j] * self.brightness
-                
                 i2 = self.height - 1 - i
-                j2 = self.width - 1 - j
-                if i2 % 2 == 1:
-                    j2 = j
+                j2 = j
+                if i2 % 2 == 0:
+                    j2 = self.width - 1 - j
+				
+                color = self.buffer[i2, j2] * self.brightness
                 
                 # Draw background color and border
                 pygame.draw.rect(
