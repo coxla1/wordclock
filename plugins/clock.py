@@ -28,7 +28,7 @@ class ClockPlugin(AbstractPlugin):
         super().__init__(width, height)
         self.config = configparser.ConfigParser()
         self.config.read('settings.conf')
-        self.section = 'tidsram_clock'
+        self.section = 'clock'
 
         self.fps = 5
 
@@ -65,6 +65,13 @@ class ClockPlugin(AbstractPlugin):
             ImageColor.getcolor('#ffb896', 'RGB'),
             ImageColor.getcolor('#e4989b', 'RGB'),
             ImageColor.getcolor('#b8819c', 'RGB'),
+            ImageColor.getcolor('#846f91', 'RGB'),
+        ]
+        
+        self.additional_minutes_colors = [
+            ImageColor.getcolor('#e4989b', 'RGB'),
+            ImageColor.getcolor('#458ac6', 'RGB'),
+            ImageColor.getcolor('#00c6ce', 'RGB'),
             ImageColor.getcolor('#846f91', 'RGB'),
         ]
         
@@ -250,7 +257,7 @@ class ClockPlugin(AbstractPlugin):
                     self.config.set(self.section, 'day_rgb', rgb2hex(self.day_color))
                 elif msg.topic == 'tidsram/plugin/clock/minutes':
                     self._minutes_color = color
-                    self.config.set(self.section, 'minutes_rgb', rgb2hex(self.minutes_color))
+                    self.config.set(self.section, 'minute_rgb', rgb2hex(self.minute_color))
                 # elif msg.topic == 'tidsram/plugin/clock/signature':
                     # self._signature_color = color
                     # self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
@@ -322,7 +329,10 @@ class ClockPlugin(AbstractPlugin):
             for column in range(self.width):
                 if index in led_indexes:
                     if index in self.additional_minutes_index:
-                        buffer[row, column] = self.minute_color
+                        if self.rainbow:
+                            buffer[row, column] = self.additional_minutes_colors[self.additional_minutes_index.index(index)]
+                        else:
+                            buffer[row, column] = self.minute_color
                     elif index in self.weekdays_index:
                         buffer[row, column] = self.day_color
                     else:

@@ -33,9 +33,9 @@ class Computer(AbstractDisplay):
         pygame.init()
         pygame.font.init()
 
-        self.section = 'tidsram_computer'
         self.config = configparser.ConfigParser()
         self.config.read('settings.conf')
+        self.section = 'computer'
 
         self.fill_empty = self.config.getboolean(self.section, 'fill_empty')
         self.show_index = self.config.getboolean(self.section, 'show_index')
@@ -48,7 +48,7 @@ class Computer(AbstractDisplay):
         self.words = ['' for _ in range(self.width * self.height)]
 
         # Load layout
-        layout = self.config.get('tidsram_display', 'layout')
+        layout = self.config.get('display', 'layout')
         f = open(layout, encoding='utf-8')
         layout = json.load(f)
 
@@ -98,7 +98,7 @@ class Computer(AbstractDisplay):
                 # Draw background color and border
                 pygame.draw.rect(
                     self.surface,
-                    DARKGRAY,
+                    BLACK,
                     [
                         (self.margin + self.size) * j + self.margin,
                         (self.margin + self.size) * i + self.margin,
