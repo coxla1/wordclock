@@ -38,17 +38,19 @@ class ClockPlugin(AbstractPlugin):
         self._sim_weekday = 0
 
         self.minutes = []
+        self.additional_minutes = []
         self.hours = []
         self.weekdays = []
         self.prefix = []
-        self.soon = []
-        self.signature = []
+        # self.soon = []
+        # self.signature = []
         self.simulate = self.config.getboolean(self.section, 'simulate')
         self.rainbow = self.config.getboolean(self.section, 'rainbow')
         self._on_color = ImageColor.getcolor(self.config.get(self.section, 'on_rgb'), 'RGB')
         self._off_color = ImageColor.getcolor(self.config.get(self.section, 'off_rgb'), 'RGB')
         self._day_color = ImageColor.getcolor(self.config.get(self.section, 'day_rgb'), 'RGB')
-        self._signature_color = ImageColor.getcolor(self.config.get(self.section, 'signature_rgb'), 'RGB')
+        self._minute_color = ImageColor.getcolor(self.config.get(self.section, 'minute_rgb'), 'RGB')
+        # self._signature_color = ImageColor.getcolor(self.config.get(self.section, 'signature_rgb'), 'RGB')
         
         # TODO : only compatible with 12 columns for now
         self.rainbow_colors = [
@@ -65,6 +67,9 @@ class ClockPlugin(AbstractPlugin):
             ImageColor.getcolor('#b8819c', 'RGB'),
             ImageColor.getcolor('#846f91', 'RGB'),
         ]
+        
+        self.additional_minutes_index = []
+        self.weekdays_index = []
 
         self.__construct_word_arrays()
 
@@ -73,8 +78,8 @@ class ClockPlugin(AbstractPlugin):
         layout = json.load(f)
 
         self.prefix = indexes(layout['prefix']['it']) + indexes(layout['prefix']['is'])
-        self.soon = indexes(layout['prefix']['soon'])
-        self.signature = indexes(layout['others']['signature'])
+        # self.soon = indexes(layout['prefix']['soon'])
+        # self.signature = indexes(layout['others']['signature'])
 
         self.minutes = [
             indexes(layout['minutes']['oclock']),
@@ -93,6 +98,25 @@ class ClockPlugin(AbstractPlugin):
             + indexes(layout['minutes']['quarter']),
             indexes(layout['minutes']['to']) + indexes(layout['minutes']['ten']),
             indexes(layout['minutes']['to']) + indexes(layout['minutes']['five']),
+        ]
+        self.additional_minutes = [
+            [],
+            indexes(layout['minutes']['one']),
+            indexes(layout['minutes']['one'])
+            + indexes(layout['minutes']['two']),
+            indexes(layout['minutes']['one'])
+            + indexes(layout['minutes']['two'])
+            + indexes(layout['minutes']['three']),
+            indexes(layout['minutes']['one'])
+            + indexes(layout['minutes']['two'])
+            + indexes(layout['minutes']['three'])
+            + indexes(layout['minutes']['four']),
+        ]
+        self.additional_minutes_index = [
+            layout['minutes']['one']['index'],
+            layout['minutes']['two']['index'],
+            layout['minutes']['three']['index'],
+            layout['minutes']['four']['index'],
         ]
         self.hours = [
             indexes(layout['hours']['midnight']),
@@ -129,6 +153,15 @@ class ClockPlugin(AbstractPlugin):
             indexes(layout['day']['saturday']),
             indexes(layout['day']['sunday']),
         ]
+        self.weekdays_index = [
+            layout['day']['monday']['index'],
+            layout['day']['tuesday']['index'],
+            layout['day']['wednesday']['index'],
+            layout['day']['thursday']['index'],
+            layout['day']['friday']['index'],
+            layout['day']['saturday']['index'],
+            layout['day']['sunday']['index'],
+        ]
 
     @property
     def on_color(self):
@@ -153,18 +186,32 @@ class ClockPlugin(AbstractPlugin):
     @day_color.setter
     def day_color(self, color):
         self._day_color = color
-
+        
     @property
-    def signature_color(self):
-        return self._signature_color
+    def minute_color(self):
+        return self._minute_color
 
-    @signature_color.setter
-    def signature_color(self, color):
-        self._signature_color = color
+    @minute_color.setter
+    def minute_color(self, color):
+        self._minute_color = color
+
+    # @property
+    # def signature_color(self):
+        # return self._signature_color
+
+    # @signature_color.setter
+    # def signature_color(self, color):
+        # self._signature_color = color
 
     @property
     def topics(self):
-        return ['tidsram/plugin/clock/on', 'tidsram/plugin/clock/off', 'tidsram/plugin/clock/day', 'tidsram/plugin/clock/signature']
+        return [
+            'tidsram/plugin/clock/on',
+            'tidsram/plugin/clock/off',
+            'tidsram/plugin/clock/day',
+            'tidsram/plugin/clock/minutes',
+            # 'tidsram/plugin/clock/signature'
+        ]
 
     @property
     def subscription_filter(self):
@@ -184,9 +231,12 @@ class ClockPlugin(AbstractPlugin):
             elif msg.topic == 'tidsram/plugin/clock/day':
                 self._day_color = color
                 self.config.set(self.section, 'day_rgb', rgb2hex(self.day_color))
-            elif msg.topic == 'tidsram/plugin/clock/signature':
-                self._signature_color = color
-                self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
+            elif msg.topic == 'tidsram/plugin/clock/minutes':
+                self._minutes_color = color
+                self.config.set(self.section, 'minutes_rgb', rgb2hex(self.minutes_color))
+            # elif msg.topic == 'tidsram/plugin/clock/signature':
+                # self._signature_color = color
+                # self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
         except ValueError as ve:
             print('Invalid RGB value')
 
@@ -229,15 +279,16 @@ class ClockPlugin(AbstractPlugin):
 
         hour_index = (hour + additional_hour) % 24
         minute_index = (minute % 60) // 5
-
+        additional_minute_index = minute % 5
         # soon = []
         # if minute / 5 % 1 > 0.7:
         #     minute_index += 1
         #     soon = self.soon
-
+        
         return (
             self.prefix
             + self.minutes[minute_index]
+            + self.additional_minutes[additional_minute_index]
             + self.hours[hour_index]
             + self.weekdays[weekday]
             # + soon
@@ -247,20 +298,24 @@ class ClockPlugin(AbstractPlugin):
     def __construct_buffer(self, hour, minute, second, weekday):
         '''Construct display buffer given the current time and weekday.'''
         buffer = np.zeros((self.height, self.width, 3), dtype=np.uint8)
-
         led_indexes = self.__constructIndexes(hour, minute, second, weekday)
+        index = 0
         
-        index = 0        
         for row in range(self.height):
             for column in range(self.width):
                 if index in led_indexes:
-                    if self.rainbow:
-                        idx_rainbow = column
-                        if (self.height - 1 - row) % 2 == 1:
-                            idx_rainbow = self.width - 1 - idx_rainbow
-                        buffer[row, column] = self.rainbow_colors[idx_rainbow]
+                    if index in self.additional_minutes_index:
+                        buffer[row, column] = self.minute_color
+                    elif index in self.weekdays_index:
+                        buffer[row, column] = self.day_color
                     else:
-                        buffer[row, column] = self.on_color
+                        if self.rainbow:
+                            idx_rainbow = column
+                            if (self.height - 1 - row) % 2 == 1:
+                                idx_rainbow = self.width - 1 - idx_rainbow
+                            buffer[row, column] = self.rainbow_colors[idx_rainbow]
+                        else:
+                            buffer[row, column] = self.on_color
                 else:
                     buffer[row, column] = self.off_color
 
