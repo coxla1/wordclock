@@ -1,4 +1,4 @@
-# Tidsram
+# Wordclock
 
 French word clock for Raspberry Pi with WS2812B LEDs.
 
@@ -14,7 +14,7 @@ The code and build is inspired by the following makers:
 
 ## Features
 
-- Display the current time with resolution of five minutes.
+- Display the current time with resolution of one minute.
 - Pygame to run the main loop consistently.
 - Abstract display allows development without access to WS2812B LEDs.
 - Control various settings through MQTT.
@@ -36,9 +36,27 @@ The topics are tied to specific plugins or core modules.
 
 ### Clock
 
-- tidsram/plugin/clock/on
-- tidsram/plugin/clock/off
+- wordclock/plugin/clock/on
+- wordclock/plugin/clock/off
+- wordclock/plugin/clock/day
+- wordclock/plugin/clock/minute
+- wordclock/plugin/clock/rainbow
 
 ### Display
 
-- tidsram/display/brightness
+- wordclock/display/brightness
+
+### Temperature
+
+- wordclock/plugin/temperature/location
+
+## Assembly instructions
+
+1. Wire the Raspberry Pi according to this diagram (a diode can also be used, see [here](https://learn.adafruit.com/neopixels-on-raspberry-pi/raspberry-pi-wiring))
+![](circuit_bb.png)
+1. Install Raspberry Pi OS
+1. Clone this github and change directory with `git clone https://github.com/coxla1/wordclock.git; cd wordclock`
+1. Install requirements with `pip3 install -r requirements.txt`
+1. Install a MQTT server on the Raspberry (mosquitto for instance)
+1. Setup your `settings.conf`
+1. You can run the script with `python3 app.py`, or add it as a service (see [here](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f) )

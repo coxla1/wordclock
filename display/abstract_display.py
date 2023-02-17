@@ -99,13 +99,12 @@ class AbstractDisplay(abc.ABC):
         pos -= 170
         return (pos * 3, 0, 255 - pos * 3)
 
-    def run_benchmark(self, gamma=False):
+    def run_benchmark(self):
         total = 0
         repeat = self.number_of_pixels * 10
         for i in range(repeat):
             start = time.time()
             self.set_pixel_at_index(i % self.number_of_pixels, (255, 255, 255))
-            self.show(gamma)
             self.clear_buffer()
             end = time.time()
             diff = end - start

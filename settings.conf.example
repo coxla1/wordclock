@@ -16,3 +16,8 @@ brightness = 0.3
 [computer]
 fill_empty = False
 show_index = True
+
+[temperature]
+# You must have an API key for https://openweathermap.org/
+api_key = xxxx
+location = Paris, FR

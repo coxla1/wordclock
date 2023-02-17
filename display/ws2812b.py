@@ -41,7 +41,7 @@ class WS2812B(AbstractDisplay):
         # Intialize the library (must be called once before other functions).
         # self.strip.begin()
 
-    def show(self, gamma=False):
+    def show(self):
         '''Iterate through the buffer and assign each LED index a color from the buffer'''
         index = 0
         for j in range(self.width):

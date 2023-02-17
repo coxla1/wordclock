@@ -221,22 +221,22 @@ class ClockPlugin(AbstractPlugin):
     @property
     def topics(self):
         return [
-            'tidsram/plugin/clock/on',
-            'tidsram/plugin/clock/off',
-            'tidsram/plugin/clock/day',
-            'tidsram/plugin/clock/minutes',
-            'tidsram/plugin/clock/rainbow',
-            # 'tidsram/plugin/clock/signature'
+            'wordclock/plugin/clock/on',
+            'wordclock/plugin/clock/off',
+            'wordclock/plugin/clock/day',
+            'wordclock/plugin/clock/minute',
+            'wordclock/plugin/clock/rainbow',
+            # 'wordclock/plugin/clock/signature'
         ]
 
     @property
     def subscription_filter(self):
-        return 'tidsram/plugin/clock/#'
+        return 'wordclock/plugin/clock/#'
 
     def callback(self, client, userdata, msg):
         print('%s %s' % (msg.topic, msg.payload))
         
-        if msg.topic == 'tidsram/plugin/clock/rainbow':
+        if msg.topic == 'wordclock/plugin/clock/rainbow':
             try:
                 boolean = bool(msg.payload.decode('utf-8'))
                 self.rainbow = boolean
@@ -246,19 +246,19 @@ class ClockPlugin(AbstractPlugin):
         else:
             try:
                 color = ImageColor.getcolor(msg.payload.decode('utf-8'), 'RGB')
-                if msg.topic == 'tidsram/plugin/clock/on':
+                if msg.topic == 'wordclock/plugin/clock/on':
                     self.on_color = color
                     self.config.set(self.section, 'on_rgb', rgb2hex(self.on_color))
-                elif msg.topic == 'tidsram/plugin/clock/off':
+                elif msg.topic == 'wordclock/plugin/clock/off':
                     self.off_color = color
                     self.config.set(self.section, 'off_rgb', rgb2hex(self.off_color))
-                elif msg.topic == 'tidsram/plugin/clock/day':
+                elif msg.topic == 'wordclock/plugin/clock/day':
                     self._day_color = color
                     self.config.set(self.section, 'day_rgb', rgb2hex(self.day_color))
-                elif msg.topic == 'tidsram/plugin/clock/minutes':
+                elif msg.topic == 'wordclock/plugin/clock/minute':
                     self._minutes_color = color
                     self.config.set(self.section, 'minute_rgb', rgb2hex(self.minute_color))
-                # elif msg.topic == 'tidsram/plugin/clock/signature':
+                # elif msg.topic == 'wordclock/plugin/clock/signature':
                     # self._signature_color = color
                     # self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
             except ValueError as ve:

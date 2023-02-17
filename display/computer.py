@@ -80,7 +80,7 @@ class Computer(AbstractDisplay):
                 
         self.show()
 
-    def show(self, gamma=False):
+    def show(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
