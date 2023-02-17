@@ -1,13 +1,16 @@
 # Tidsram
 
-Swedish word clock for Raspberry Pi with WS2812B LEDs.
+French word clock for Raspberry Pi with WS2812B LEDs.
 
 ## Inspiration
+
+This is a fork from the project [tidsram](https://github.com/machosallad/tidsram) of [machosallad](https://github.com/machosallad).
+Many thanks to them for providing their code!
 
 The code and build is inspired by the following makers:
 
 - [rpi_wordclock](https://github.com/bk1285/rpi_wordclock) by [bk1285](https://github.com/bk1285)
-- [LED Word Clock](https://www.youtube.com/watch?v=SXYwSN6mX_Q) by [Chloe Kuo](https://www.youtube.com/channel/UC0ybj4KuDQc_jOx1ONrlrfw)
+- [LED Word Clock](https://www.youtube.com/watch?v=SXYwSN6mX_Q) ([code](https://github.com/ckuo23/wordclock)) by [Chloe Kuo](https://www.youtube.com/channel/UC0ybj4KuDQc_jOx1ONrlrfw)
 
 ## Features
 
