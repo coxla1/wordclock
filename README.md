@@ -59,4 +59,4 @@ The topics are tied to specific plugins or core modules.
 1. Install requirements with `pip3 install -r requirements.txt`
 1. Install a MQTT server on the Raspberry (mosquitto for instance)
 1. Setup your `settings.conf`
-1. You can run the script with `python3 app.py`, or add it as a service (see [here](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f) )
+1. You can run the script with `python3 app.py`, or add it as a service (see [here](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f))
