@@ -22,12 +22,12 @@ class WS2812B(AbstractDisplay):
         super().__init__(width, height)
 
         self.config = configparser.ConfigParser()
-        self.config.read("settings.conf")
-        self.section = "tidsram_display"
+        self.config.read('settings.conf')
+        self.section = 'tidsram_display'
 
-        self.led_brightness = self.config.getint(self.section, "brightness")
+        self.led_brightness = self.config.getint(self.section, 'brightness')
         self.reverse_mirror = self.config.getboolean(
-            self.section, "reverse_mirror"
+            self.section, 'reverse_mirror'
         )
 
         # Create NeoPixel object with appropriate configuration.
@@ -46,7 +46,7 @@ class WS2812B(AbstractDisplay):
         self.strip.begin()
 
     def show(self, gamma=False):
-        """Iterate through the buffer and assign each LED index a color from the buffer"""
+        '''Iterate through the buffer and assign each LED index a color from the buffer'''
         index = 0
         for j in range(self.width):
             for i in range(self.height):
@@ -64,7 +64,7 @@ class WS2812B(AbstractDisplay):
         return
 
     def get_led_index(self, x, y):
-        """Determines if the row is even or odd and returns a new index based on X and Y"""
+        '''Determines if the row is even or odd and returns a new index based on X and Y'''
         pos = 0
         if self.reverse_mirror:
             if x & 0x1:
@@ -84,7 +84,7 @@ class WS2812B(AbstractDisplay):
         return pos
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     display = WS2812B()
     display.create_test_pattern()
     display.show()

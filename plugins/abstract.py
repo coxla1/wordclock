@@ -16,25 +16,25 @@ class AbstractPlugin(abc.ABC):
 
     @property
     def buffer(self):
-        """The buffer contains the rgb data representation of the source."""
+        '''The buffer contains the rgb data representation of the source.'''
         return self._buffer
 
     def clear_buffer(self):
-        """Clear the source buffer by filling it with zeros."""
+        '''Clear the source buffer by filling it with zeros.'''
         self._buffer = np.zeros_like(self._buffer)
 
     @abc.abstractmethod
     def update(self, dt):
-        """Update the source by passing current dt."""
+        '''Update the source by passing current dt.'''
 
     @abc.abstractproperty
     def topics(self):
-        """Get an array of of topics which the plugin accepts"""
+        '''Get an array of of topics which the plugin accepts'''
 
     @abc.abstractproperty
     def subscription_filter(self):
-        """Topic filter used to trigger the callback method"""
+        '''Topic filter used to trigger the callback method'''
 
     @abc.abstractmethod
     def callback(self, client, userdata, msg):
-        """Method which should be called when a topic is updated which matches the subscription filter"""
+        '''Method which should be called when a topic is updated which matches the subscription filter'''

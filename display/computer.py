@@ -33,30 +33,30 @@ class Computer(AbstractDisplay):
         pygame.init()
         pygame.font.init()
 
-        self.section = "tidsram_computer"
+        self.section = 'tidsram_computer'
         self.config = configparser.ConfigParser()
-        self.config.read("settings.conf")
+        self.config.read('settings.conf')
 
-        self.fill_empty = self.config.getboolean(self.section, "fill_empty")
-        self.show_index = self.config.getboolean(self.section, "show_index")
+        self.fill_empty = self.config.getboolean(self.section, 'fill_empty')
+        self.show_index = self.config.getboolean(self.section, 'show_index')
 
         # Load fonts
-        self.index_font = pygame.font.SysFont("arial", 12)
-        self.char_font = pygame.font.Font("fonts/D-DINExp-Bold.ttf", self.size)
+        self.index_font = pygame.font.SysFont('arial', 12)
+        self.char_font = pygame.font.Font('fonts/D-DINExp-Bold.ttf', self.size)
 
         # Prepare word list
-        self.words = ["" for _ in range(self.width * self.height)]
+        self.words = ['' for _ in range(self.width * self.height)]
 
         # Load layout
-        layout = self.config.get("tidsram_display", "layout")
-        f = open(layout, encoding="utf-8")
+        layout = self.config.get('tidsram_display', 'layout')
+        f = open(layout, encoding='utf-8')
         layout = json.load(f)
 
         # Read layout words
         for category in layout:
             for words in layout[category]:
-                word = layout[category][words]["word"]
-                index = int(layout[category][words]["index"])
+                word = layout[category][words]['word']
+                index = int(layout[category][words]['index'])
                 
                 add = 1
                 if (index // self.width) % 2 == 0:
@@ -70,13 +70,13 @@ class Computer(AbstractDisplay):
         # Add random letters to empty slots
         if self.fill_empty:
             for i in range(self.width * self.height):
-                if self.words[i] == "":
-                    uppercase = "ABCDEFGHIJKLMNOPQRSTUVXYZ"
+                if self.words[i] == '':
+                    uppercase = 'ABCDEFGHIJKLMNOPQRSTUVXYZ'
                     self.words[i] = random.choice(uppercase)
 
         # Create the window
         self.surface = pygame.display.set_mode(self.window_size)
-        pygame.display.set_caption("tidsram {}x{}".format(width, height))
+        pygame.display.set_caption('tidsram {}x{}'.format(width, height))
                 
         self.show()
 
@@ -141,7 +141,7 @@ class Computer(AbstractDisplay):
         return
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     display = Computer()
     # display.run_benchmark()
     display.create_test_pattern()

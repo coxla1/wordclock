@@ -1,8 +1,8 @@
 #!/user/bin/env python3
-"""
+'''
 Main entry point of the tidsram project.
 Runs the main game-loop.
-"""
+'''
 
 # Imports
 import os
@@ -20,7 +20,7 @@ import paho.mqtt.client as mqtt
 
 # Global variables
 DISPLAY_WIDTH = 12
-DISPLAY_HEIGTH = 12
+DISPLAY_HEIGHT = 12
 
 
 class WordClock:
@@ -31,19 +31,19 @@ class WordClock:
         if is_raspberrypi():
             from display.ws2812b import WS2812B
 
-            self.display = WS2812B(DISPLAY_WIDTH, DISPLAY_HEIGTH)
+            self.display = WS2812B(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         else:
             from display.computer import Computer
 
-            self.display = Computer(DISPLAY_WIDTH, DISPLAY_HEIGTH, 5, 50)
+            self.display = Computer(DISPLAY_WIDTH, DISPLAY_HEIGHT, 5, 50)
 
         # Sources
-        self.source = ClockPlugin(DISPLAY_HEIGTH, DISPLAY_HEIGTH)
+        self.source = ClockPlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         self.display.brightness = 1
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_mqtt_connect(self, client, userdata, flags, rc):
-        print("Connected with result code " + str(rc))
+        print('Connected with result code ' + str(rc))
 
         # Subscribe to topics from the display
         for topic in self.display.topics:
@@ -65,7 +65,7 @@ class WordClock:
 
     # The callback for when a PUBLISH message is received from the server.
     def on_mqtt_message(self, client, userdata, msg):
-        print(msg.topic + " " + str(msg.payload))
+        print(msg.topic + ' ' + str(msg.payload))
 
     def mainloop(self):
         # Prepare and start loading resources
@@ -74,7 +74,7 @@ class WordClock:
         client = mqtt.Client()
         client.on_connect = self.on_mqtt_connect
         client.on_message = self.on_mqtt_message
-        client.connect("localhost")
+        client.connect('localhost')
         client.loop_start()
 
         # Timer
@@ -100,8 +100,8 @@ class WordClock:
 
 def is_raspberrypi():
     try:
-        with io.open("/sys/firmware/devicetree/base/model", "r") as m:
-            if "raspberry pi" in m.read().lower():
+        with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
+            if 'raspberry pi' in m.read().lower():
                 return True
     except Exception:
         pass
@@ -109,7 +109,7 @@ def is_raspberrypi():
 
 
 # Main body
-if __name__ == "__main__":
+if __name__ == '__main__':
     wordclock = WordClock()
     wordclock.display.show()
 

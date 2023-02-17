@@ -15,7 +15,7 @@ class AbstractDisplay(abc.ABC):
 
     @property
     def buffer(self):
-        """The buffer contains the rgb data to be displayed."""
+        '''The buffer contains the rgb data to be displayed.'''
         return self._buffer
 
     @buffer.setter
@@ -25,34 +25,34 @@ class AbstractDisplay(abc.ABC):
                 self._buffer = value
 
     def clear_buffer(self):
-        """Erase the buffer and fill it with zeros."""
+        '''Erase the buffer and fill it with zeros.'''
         self._buffer = np.zeros_like(self._buffer)
 
     @abc.abstractmethod
     def show(self, gamma=False):
-        """Display the content of the buffer."""
+        '''Display the content of the buffer.'''
 
     @property
     def topics(self):
-        """Get an array of of topics which the display driver accepts"""
-        return ["tidsram/display/brightness"]
+        '''Get an array of of topics which the display driver accepts'''
+        return ['tidsram/display/brightness']
 
     @property
     def subscription_filter(self):
-        """Topic filter used to trigger the callback method"""
-        return "tidsram/display/#"
+        '''Topic filter used to trigger the callback method'''
+        return 'tidsram/display/#'
 
     def callback(self, client, userdata, msg):
-        """Method which should be called when a topic is updated which matches the subscription filter"""
+        '''Method which should be called when a topic is updated which matches the subscription filter'''
         try:
-            if msg.topic == "tidsram/display/brightness":
-                self.brightness = float(msg.payload.decode("utf-8"))
+            if msg.topic == 'tidsram/display/brightness':
+                self.brightness = float(msg.payload.decode('utf-8'))
         except ValueError as ve:
-            print("Invalid brightness value")
+            print('Invalid brightness value')
 
     @property
     def brightness(self):
-        """Get current brightness level (0.0 to 1.0)."""
+        '''Get current brightness level (0.0 to 1.0).'''
         return self._brightness
 
     @brightness.setter
@@ -88,7 +88,7 @@ class AbstractDisplay(abc.ABC):
             self.set_pixel_at_index(i % self.number_of_pixels, self.wheel(i))
 
     def wheel(self, pos):
-        """Input a value 0 to 255 to get a color value. The colours are a transition r - g - b - back to r"""
+        '''Input a value 0 to 255 to get a color value. The colours are a transition r - g - b - back to r'''
         if pos < 0 or pos > 255:
             return (0, 0, 0)
         if pos < 85:
@@ -111,7 +111,7 @@ class AbstractDisplay(abc.ABC):
             diff = end - start
             total = total + diff
         print(
-            "{:.2f}s for {} iterations. {:d} refreshs per second".format(
+            '{:.2f}s for {} iterations. {:d} refreshs per second'.format(
                 total, repeat, int(repeat / total)
             )
         )
