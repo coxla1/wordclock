@@ -45,12 +45,12 @@ class ClockPlugin(AbstractPlugin):
         # self.soon = []
         # self.signature = []
         self.simulate = self.config.getboolean(self.section, 'simulate')
-        self.rainbow = self.config.getboolean(self.section, 'rainbow')
         self._on_color = ImageColor.getcolor(self.config.get(self.section, 'on_rgb'), 'RGB')
         self._off_color = ImageColor.getcolor(self.config.get(self.section, 'off_rgb'), 'RGB')
         self._day_color = ImageColor.getcolor(self.config.get(self.section, 'day_rgb'), 'RGB')
         self._minute_color = ImageColor.getcolor(self.config.get(self.section, 'minute_rgb'), 'RGB')
         # self._signature_color = ImageColor.getcolor(self.config.get(self.section, 'signature_rgb'), 'RGB')
+        self._rainbow = self.config.getboolean(self.section, 'rainbow')
         
         # TODO : only compatible with 12 columns for now
         self.rainbow_colors = [
@@ -202,6 +202,14 @@ class ClockPlugin(AbstractPlugin):
     # @signature_color.setter
     # def signature_color(self, color):
         # self._signature_color = color
+        
+    @property
+    def rainbow(self):
+        return self._rainbow
+
+    @rainbow.setter
+    def rainbow(self, boolean):
+        self._rainbow = boolean
 
     @property
     def topics(self):
@@ -210,6 +218,7 @@ class ClockPlugin(AbstractPlugin):
             'tidsram/plugin/clock/off',
             'tidsram/plugin/clock/day',
             'tidsram/plugin/clock/minutes',
+            'tidsram/plugin/clock/rainbow',
             # 'tidsram/plugin/clock/signature'
         ]
 
@@ -219,26 +228,34 @@ class ClockPlugin(AbstractPlugin):
 
     def callback(self, client, userdata, msg):
         print('%s %s' % (msg.topic, msg.payload))
-
-        try:
-            color = ImageColor.getcolor(msg.payload.decode('utf-8'), 'RGB')
-            if msg.topic == 'tidsram/plugin/clock/on':
-                self.on_color = color
-                self.config.set(self.section, 'on_rgb', rgb2hex(self.on_color))
-            elif msg.topic == 'tidsram/plugin/clock/off':
-                self.off_color = color
-                self.config.set(self.section, 'off_rgb', rgb2hex(self.off_color))
-            elif msg.topic == 'tidsram/plugin/clock/day':
-                self._day_color = color
-                self.config.set(self.section, 'day_rgb', rgb2hex(self.day_color))
-            elif msg.topic == 'tidsram/plugin/clock/minutes':
-                self._minutes_color = color
-                self.config.set(self.section, 'minutes_rgb', rgb2hex(self.minutes_color))
-            # elif msg.topic == 'tidsram/plugin/clock/signature':
-                # self._signature_color = color
-                # self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
-        except ValueError as ve:
-            print('Invalid RGB value')
+        
+        if msg.topic == 'tidsram/plugin/clock/rainbow':
+            try:
+                boolean = bool(msg.payload.decode('utf-8'))
+                self.rainbow = boolean
+                self.config.set(self.section, 'rainbow', boolean)
+            except ValueError as ve:
+                print('Invalid boolean')
+        else:
+            try:
+                color = ImageColor.getcolor(msg.payload.decode('utf-8'), 'RGB')
+                if msg.topic == 'tidsram/plugin/clock/on':
+                    self.on_color = color
+                    self.config.set(self.section, 'on_rgb', rgb2hex(self.on_color))
+                elif msg.topic == 'tidsram/plugin/clock/off':
+                    self.off_color = color
+                    self.config.set(self.section, 'off_rgb', rgb2hex(self.off_color))
+                elif msg.topic == 'tidsram/plugin/clock/day':
+                    self._day_color = color
+                    self.config.set(self.section, 'day_rgb', rgb2hex(self.day_color))
+                elif msg.topic == 'tidsram/plugin/clock/minutes':
+                    self._minutes_color = color
+                    self.config.set(self.section, 'minutes_rgb', rgb2hex(self.minutes_color))
+                # elif msg.topic == 'tidsram/plugin/clock/signature':
+                    # self._signature_color = color
+                    # self.config.set(self.section, 'signature_rgb', rgb2hex(self.signature_color))
+            except ValueError as ve:
+                print('Invalid RGB value')
 
         with open('settings.conf', 'w') as configfile:
             self.config.write(configfile)
