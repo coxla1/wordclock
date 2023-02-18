@@ -48,6 +48,9 @@ The topics are tied to specific plugins or core modules.
 
 ### Temperature
 
+- wordclock/plugin/temperature/on
+- wordclock/plugin/temperature/off
+- wordclock/plugin/temperature/rainbow
 - wordclock/plugin/temperature/location
 
 ## Assembly instructions
