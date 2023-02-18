@@ -11,11 +11,14 @@ import sys
 import abc
 import numpy as np
 import time
+import datetime
+import configparser
 import pygame
 import io
 from io import BytesIO
 from pathlib import Path
 from plugins.clock import ClockPlugin
+from plugins.temperature import TemperaturePlugin
 import paho.mqtt.client as mqtt
 
 # Global variables
@@ -36,10 +39,20 @@ class WordClock:
             from display.computer import Computer
 
             self.display = Computer(DISPLAY_WIDTH, DISPLAY_HEIGHT, 5, 50)
-
+        
+        config = configparser.ConfigParser()
+        config.read('settings.conf')
+        self.enable_temperature = config.getboolean('temperature', 'enable')
+        
         # Sources
-        self.source = ClockPlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        self.clock = ClockPlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        
+        if self.enable_temperature:
+            self.temperature = TemperaturePlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        
+        self.source = self.clock
         self.display.brightness = 1
+        
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_mqtt_connect(self, client, userdata, flags, rc):
@@ -79,18 +92,36 @@ class WordClock:
 
         # Timer
         clock = pygame.time.Clock()
+        
+        start = 0
+        flag = True
 
         while True:
+            if self.enable_temperature:
+                minutes = datetime.datetime.now().time().minute
+            
+                if minutes % 2 == 0 and start == 0 and flag:
+                    start = time.time()
+                    self.source = self.temperature
+                
+                if start > 0 and time.time() - start > 10:
+                    start = 0
+                    flag = False
+                    self.source = self.clock
+                
+                if minutes % 2 == 1:
+                    flag = True
+            
+            # Limit CPU usage do not go faster than FPS
+            dt = clock.tick(self.source.fps)
+
+            self.source.update(dt)
+            
             # Update the display buffer
             self.display.buffer = self.source.buffer
 
             # Render the frame
             self.display.show()
-
-            # Limit CPU usage do not go faster than FPS
-            dt = clock.tick(self.source.fps)
-
-            self.source.update(dt)
 
         return
 
