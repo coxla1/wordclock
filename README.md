@@ -61,6 +61,7 @@ The topics are tied to specific plugins or core modules.
 1. Clone this github and change directory with `git clone https://github.com/coxla1/wordclock.git; cd wordclock`
 1. Install CircuitPython and NeoPixel library following [this](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi) and [this](https://learn.adafruit.com/neopixels-on-raspberry-pi/python-usage)
 1. Install requirements with `pip3 install -r requirements.txt`
+1. Do not forget to disable audio ! (as in the second link on NeoPixel library)
 1. Install a MQTT server on the Raspberry (mosquitto for instance)
 1. Setup your `settings.conf`
 1. You can run the script with `python3 app.py`, or add it as a service (see [here](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f))
