@@ -95,7 +95,7 @@ class ClockPlugin(AbstractPlugin):
             indexes(layout['minutes']['and']) + indexes(layout['minutes']['quarter']),
             indexes(layout['minutes']['twenty']),
             indexes(layout['minutes']['twenty']) + indexes(layout['minutes']['five']),
-            indexes(layout['minutes']['half']),
+            indexes(layout['minutes']['and']) + indexes(layout['minutes']['half']),
             indexes(layout['minutes']['to'])
             + indexes(layout['minutes']['twenty'])
             + indexes(layout['minutes']['five']),

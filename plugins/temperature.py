@@ -373,7 +373,6 @@ class TemperaturePlugin(AbstractPlugin):
 
     def __constructIndexes(self, temp):
         '''Get array of indexes which map which letters to light up.'''
-        
         digit1 = []
         digit2 = []
         degree = []
@@ -384,7 +383,7 @@ class TemperaturePlugin(AbstractPlugin):
                 offsetdeg = 0
             else:
                 offset = 2
-                offsetdeg = 2
+                offsetdeg = 1
                 
             for r, c in self.numbers[temp]:
                 digit1.append(self.rc_map[r, c+offset])
