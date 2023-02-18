@@ -45,7 +45,7 @@ class Computer(AbstractDisplay):
         self.char_font = pygame.font.Font('fonts/D-DINExp-Bold.ttf', self.size)
 
         # Prepare word list
-        self.words = ['' for _ in range(self.width * self.height)]
+        self.words = ['' for _ in range(self.number_of_pixels)]
 
         # Load layout
         layout = self.config.get('display', 'layout')
@@ -66,7 +66,7 @@ class Computer(AbstractDisplay):
                 for char in word:
                     self.words[index] = char
                     index += add
-
+        
         # Add random letters to empty slots
         if self.fill_empty:
             for i in range(self.width * self.height):
@@ -85,59 +85,59 @@ class Computer(AbstractDisplay):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        index = 0
-        for j in range(self.width):
-            for i in range(self.height):
-                i2 = self.height - 1 - i
-                j2 = j
-                if i2 % 2 == 0:
-                    j2 = self.width - 1 - j
-				
-                color = self.buffer[i2, j2] * self.brightness
+        
+        for index in range(self.number_of_pixels):
+            row = (self.number_of_pixels - 1 - index) // self.width
+            if (row - self.height + 1) % 2 == 0:
+                column = (self.number_of_pixels - 1 - index) % self.width
+            else:
+                column = index % self.width
+        
+            color = self.buffer[index] * self.brightness
                 
-                # Draw background color and border
-                pygame.draw.rect(
-                    self.surface,
-                    BLACK,
-                    [
-                        (self.margin + self.size) * j + self.margin,
-                        (self.margin + self.size) * i + self.margin,
-                        self.size,
-                        self.size,
-                    ],
-                )
+            # Draw background color and border
+            pygame.draw.rect(
+                self.surface,
+                BLACK,
+                [
+                    (self.margin + self.size) * column + self.margin,
+                    (self.margin + self.size) * row + self.margin,
+                    self.size,
+                    self.size,
+                ],
+            )
 
-                # Draw characters from words array
-                character = self.char_font.render(
-                    self.words[i2 * self.width + j2], True, color
+            # Draw characters from words array
+            character = self.char_font.render(
+                self.words[index], True, color
+            )
+            self.surface.blit(
+                character,
+                [
+                    (self.margin + self.size) * column + self.margin * 3,
+                    (self.margin + self.size) * row + self.margin,
+                    self.size,
+                    self.size,
+                ],
+            )
+
+            # Draw index number of current character
+            if self.show_index:
+                index_as_img = self.index_font.render(
+                    str(index), True, WHITE
                 )
                 self.surface.blit(
-                    character,
+                    index_as_img,
                     [
-                        (self.margin + self.size) * j + self.margin * 3,
-                        (self.margin + self.size) * i + self.margin,
+                        (self.margin + self.size) * column + self.margin,
+                        (self.margin + self.size) * row + self.margin,
                         self.size,
                         self.size,
                     ],
                 )
 
-                # Draw index number of current character
-                if self.show_index:
-                    index_as_img = self.index_font.render(
-                        str(i2 * self.width + j2), True, WHITE
-                    )
-                    self.surface.blit(
-                        index_as_img,
-                        [
-                            (self.margin + self.size) * j + self.margin,
-                            (self.margin + self.size) * i + self.margin,
-                            self.size,
-                            self.size,
-                        ],
-                    )
-
         pygame.display.update()
-
+        
         return
 
 

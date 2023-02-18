@@ -8,6 +8,13 @@ off_rgb = #000
 day_rgb = #FFF
 minute_rgb = #FFF
 
+[temperature]
+enable = True
+
+# You must have an API key for https://openweathermap.org/
+api_key = xxxx
+location = Paris, FR
+
 [display]
 layout = layouts/french.json
 # From 0 to 1
@@ -16,8 +23,3 @@ brightness = 0.3
 [computer]
 fill_empty = False
 show_index = True
-
-[temperature]
-# You must have an API key for https://openweathermap.org/
-api_key = xxxx
-location = Paris, FR

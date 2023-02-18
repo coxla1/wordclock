@@ -139,7 +139,7 @@ class ClockPlugin(AbstractPlugin):
             indexes(layout['hours']['ten']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['eleven']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['midday']),
-            indexes(layout['hours']['one']) + indexes(layout['hours']['hour']),
+            indexes(layout['hours']['one']) + indexes(layout['hours'][0'hour']),
             indexes(layout['hours']['two']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['three']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['four']) + indexes(layout['hours']['hours']),
@@ -321,31 +321,34 @@ class ClockPlugin(AbstractPlugin):
 
     def __construct_buffer(self, hour, minute, second, weekday):
         '''Construct display buffer given the current time and weekday.'''
-        buffer = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+        buffer = np.zeros((self.number_of_pixels, 3), dtype=np.uint8)
         led_indexes = self.__constructIndexes(hour, minute, second, weekday)
-        index = 0
         
-        for row in range(self.height):
-            for column in range(self.width):
-                if index in led_indexes:
-                    if index in self.additional_minutes_index:
-                        if self.rainbow:
-                            buffer[row, column] = self.additional_minutes_colors[self.additional_minutes_index.index(index)]
-                        else:
-                            buffer[row, column] = self.minute_color
-                    elif index in self.weekdays_index:
-                        buffer[row, column] = self.day_color
+        for index in range(self.number_of_pixels):
+            if index in led_indexes:
+                if index in self.additional_minutes_index:
+                    if self.rainbow:
+                        buffer[index] = self.additional_minutes_colors[self.additional_minutes_index.index(index)]
                     else:
-                        if self.rainbow:
-                            idx_rainbow = column
-                            if (self.height - 1 - row) % 2 == 1:
-                                idx_rainbow = self.width - 1 - idx_rainbow
-                            buffer[row, column] = self.rainbow_colors[idx_rainbow]
-                        else:
-                            buffer[row, column] = self.on_color
+                        buffer[index] = self.minute_color
+                
+                elif index in self.weekdays_index:
+                    buffer[index] = self.day_color
+                
                 else:
-                    buffer[row, column] = self.off_color
-
-                index += 1
+                    if self.rainbow:
+                        row = (self.number_of_pixels - 1 - index) // self.width
+                        if (row - self.height + 1) % 2 == 0:
+                            column = (self.number_of_pixels - 1 - index) % self.width
+                        else:
+                            column = index % self.width
+                        
+                        buffer[index] = self.rainbow_colors[column]
+                    
+                    else:
+                        buffer[index] = self.on_color
+                
+            else:
+                buffer[index] = self.off_color
 
         return buffer
