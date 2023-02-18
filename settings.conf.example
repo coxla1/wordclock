@@ -1,8 +1,10 @@
 [clock]
+# Does not use real time, useful for debugging
 simulate = False
 
+# Colors settings
+# rainbow overrides on_rgb and minute_rgb, but only works with 12x12 clock
 rainbow = True
-
 on_rgb = #FFF
 off_rgb = #000
 day_rgb = #FFF
@@ -15,11 +17,17 @@ enable = True
 api_key = xxxx
 location = Paris, FR
 
+# Colors settings
+# rainbow overrides on_rgb, but only works with 12x12 clock
+rainbow = True
+on_rgb = #FFF
+off_rgb = #000
+
 [display]
 layout = layouts/french.json
 # From 0 to 1
 brightness = 0.3
 
 [computer]
-fill_empty = False
+fill_empty = True
 show_index = True

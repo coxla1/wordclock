@@ -139,7 +139,7 @@ class ClockPlugin(AbstractPlugin):
             indexes(layout['hours']['ten']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['eleven']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['midday']),
-            indexes(layout['hours']['one']) + indexes(layout['hours'][0'hour']),
+            indexes(layout['hours']['one']) + indexes(layout['hours']['hour']),
             indexes(layout['hours']['two']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['three']) + indexes(layout['hours']['hours']),
             indexes(layout['hours']['four']) + indexes(layout['hours']['hours']),
@@ -241,8 +241,9 @@ class ClockPlugin(AbstractPlugin):
                 boolean = bool(msg.payload.decode('utf-8'))
                 self.rainbow = boolean
                 self.config.set(self.section, 'rainbow', boolean)
-            except ValueError as ve:
+            except:
                 print('Invalid boolean')
+                
         else:
             try:
                 color = ImageColor.getcolor(msg.payload.decode('utf-8'), 'RGB')

@@ -94,7 +94,7 @@ class Computer(AbstractDisplay):
                 column = index % self.width
         
             color = self.buffer[index] * self.brightness
-                
+                            
             # Draw background color and border
             pygame.draw.rect(
                 self.surface,
