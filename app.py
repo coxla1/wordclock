@@ -63,7 +63,10 @@ class WordClock:
             client.subscribe(topic)
 
         # Subscribe to topics from plugins
-        for topic in self.source.topics:
+        for topic in self.clock.topics:
+            client.subscribe(topic)
+        
+        for topic in self.temperature.topics:
             client.subscribe(topic)
 
         # Add callback for the display

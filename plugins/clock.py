@@ -238,7 +238,8 @@ class ClockPlugin(AbstractPlugin):
         
         if msg.topic == 'wordclock/plugin/clock/rainbow':
             try:
-                boolean = bool(msg.payload.decode('utf-8'))
+                txt = msg.payload.decode('utf-8')
+                boolean = txt.lower() == 'true'
                 self.rainbow = boolean
                 self.config.set(self.section, 'rainbow', boolean)
             except:
