@@ -33,6 +33,7 @@ class WS2812B(AbstractDisplay):
         )
         
         self.strip.brightness = self._brightness
+        self.strip.show()
         
         # Intialize the library (must be called once before other functions).
         # self.strip.begin()
