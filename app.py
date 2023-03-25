@@ -51,7 +51,6 @@ class WordClock:
             self.temperature = TemperaturePlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
         
         self.source = self.clock
-        self.display.brightness = 1
         
 
     # The callback for when the client receives a CONNACK response from the server.
