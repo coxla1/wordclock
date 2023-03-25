@@ -55,7 +55,7 @@ class AbstractDisplay(abc.ABC):
                 txt = msg.payload.decode('utf-8')
                 b = float(txt)
                 self._brightness = b
-                self.config.set(self.section, 'brightness', b)
+                self.config.set(self.section, 'brightness', txt)
         except ValueError as ve:
             print('Invalid brightness value')
 
