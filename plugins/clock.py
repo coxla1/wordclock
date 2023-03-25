@@ -241,7 +241,7 @@ class ClockPlugin(AbstractPlugin):
                 txt = msg.payload.decode('utf-8')
                 boolean = txt.lower() == 'true'
                 self.rainbow = boolean
-                self.config.set(self.section, 'rainbow', boolean)
+                self.config.set(self.section, 'rainbow', txt)
             except:
                 print('Invalid boolean')
                 
