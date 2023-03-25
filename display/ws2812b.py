@@ -22,18 +22,17 @@ class WS2812B(AbstractDisplay):
         self.section = 'display'
 
         self._brightness = self.config.getfloat(self.section, 'brightness')
-        print(self._brightness)
         
         # Create NeoPixel object with appropriate configuration.
         self.strip = neopixel.NeoPixel(
             LED_PIN,
             self.number_of_pixels,
-            brightness = self.brightness,
+            brightness = 1,
             pixel_order = LED_ORDER,
             auto_write = False
         )
         
-        print(self.strip.brightness)
+        self.strip.brightness = self._brightness
         
         # Intialize the library (must be called once before other functions).
         # self.strip.begin()
