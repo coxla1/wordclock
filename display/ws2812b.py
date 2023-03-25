@@ -27,14 +27,11 @@ class WS2812B(AbstractDisplay):
         self.strip = neopixel.NeoPixel(
             LED_PIN,
             self.number_of_pixels,
-            brightness = 1,
+            brightness = self._brightness,
             pixel_order = LED_ORDER,
             auto_write = False
         )
-        
-        self.strip.brightness = self._brightness
-        self.strip.show()
-        
+                
         # Intialize the library (must be called once before other functions).
         # self.strip.begin()
     

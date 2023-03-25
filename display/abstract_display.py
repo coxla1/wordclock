@@ -17,7 +17,7 @@ class AbstractDisplay(abc.ABC):
         self.section = 'display'
         
         self._buffer = np.zeros((self.number_of_pixels, 3), dtype=np.uint8)
-        self._brightness = 1.0
+        self._brightness = self.config.getfloat(self.section, 'brightness')
 
     @property
     def buffer(self):
@@ -54,7 +54,7 @@ class AbstractDisplay(abc.ABC):
             if msg.topic == 'wordclock/display/brightness':
                 txt = msg.payload.decode('utf-8')
                 b = float(txt)
-                self.brightness = b
+                self._brightness = b
                 self.config.set(self.section, 'brightness', b)
         except ValueError as ve:
             print('Invalid brightness value')
