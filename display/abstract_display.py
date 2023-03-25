@@ -10,6 +10,11 @@ class AbstractDisplay(abc.ABC):
         self.width = width
         self.height = height
         self.number_of_pixels = self.height * self.width
+        
+        self.config = configparser.ConfigParser()
+        self.config.read('settings.conf')
+        self.section = 'display'
+        
         self._buffer = np.zeros((self.number_of_pixels, 3), dtype=np.uint8)
         self._brightness = 1.0
 
@@ -46,7 +51,10 @@ class AbstractDisplay(abc.ABC):
         '''Method which should be called when a topic is updated which matches the subscription filter'''
         try:
             if msg.topic == 'wordclock/display/brightness':
-                self.brightness = float(msg.payload.decode('utf-8'))
+                txt = msg.payload.decode('utf-8')
+                b = float(txt)
+                self.brightness = b
+                self.config.set(self.section, 'brightness', b)
         except ValueError as ve:
             print('Invalid brightness value')
 

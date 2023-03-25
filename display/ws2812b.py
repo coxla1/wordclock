@@ -9,8 +9,8 @@ import board
 import neopixel
 
 # LED strip configuration:
-LED_PIN         = 18
-LED_ORDER       = neopixel.RGB  # neopixel.GRB if colors are revert
+LED_PIN         = board.D18
+LED_ORDER       = neopixel.GRB  # neopixel.GRB if colors are revert
 
 
 class WS2812B(AbstractDisplay):
@@ -22,8 +22,8 @@ class WS2812B(AbstractDisplay):
         self.section = 'display'
 
         self._brightness = self.config.getfloat(self.section, 'brightness')
-        self.reverse_mirror = self.config.getboolean(self.section, 'reverse_mirror')
-
+        print(self._brightness)
+        
         # Create NeoPixel object with appropriate configuration.
         self.strip = neopixel.NeoPixel(
             LED_PIN,
@@ -32,7 +32,9 @@ class WS2812B(AbstractDisplay):
             pixel_order = LED_ORDER,
             auto_write = False
         )
-
+        
+        print(self.strip.brightness)
+        
         # Intialize the library (must be called once before other functions).
         # self.strip.begin()
     
