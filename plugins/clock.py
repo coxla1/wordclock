@@ -54,25 +54,25 @@ class ClockPlugin(AbstractPlugin):
         
         # TODO : only compatible with 12 columns for now
         self.rainbow_colors = [
-            ImageColor.getcolor('#458ac6', 'RGB'),
-            ImageColor.getcolor('#00a9d7', 'RGB'),
-            ImageColor.getcolor('#00c6ce', 'RGB'),
-            ImageColor.getcolor('#2adeb0', 'RGB'),
-            ImageColor.getcolor('#9cef8a', 'RGB'),
-            ImageColor.getcolor('#f9f871', 'RGB'),
-            ImageColor.getcolor('#ffe171', 'RGB'),
-            ImageColor.getcolor('#ffca80', 'RGB'),
-            ImageColor.getcolor('#ffb896', 'RGB'),
-            ImageColor.getcolor('#e4989b', 'RGB'),
-            ImageColor.getcolor('#b8819c', 'RGB'),
-            ImageColor.getcolor('#846f91', 'RGB'),
+            ImageColor.getcolor('darkred', 'RGB'),
+            ImageColor.getcolor('orangered', 'RGB'),
+            ImageColor.getcolor('gold', 'RGB'),
+            ImageColor.getcolor('lawngreen', 'RGB'),
+            ImageColor.getcolor('forestgreen', 'RGB'),
+            ImageColor.getcolor('lightseagreen', 'RGB'),
+            ImageColor.getcolor('darkcyan', 'RGB'),
+            ImageColor.getcolor('midnightblue', 'RGB'),
+            ImageColor.getcolor('indigo', 'RGB'),
+            ImageColor.getcolor('darkmagenta', 'RGB'),
+            ImageColor.getcolor('mediumvioletred', 'RGB'),
+            ImageColor.getcolor('salmon', 'RGB'),
         ]
         
         self.additional_minutes_colors = [
-            ImageColor.getcolor('#e4989b', 'RGB'),
-            ImageColor.getcolor('#458ac6', 'RGB'),
-            ImageColor.getcolor('#00c6ce', 'RGB'),
-            ImageColor.getcolor('#846f91', 'RGB'),
+            ImageColor.getcolor('darkmagenta', 'RGB'),
+            ImageColor.getcolor('darkred', 'RGB'),
+            ImageColor.getcolor('gold', 'RGB'),
+            ImageColor.getcolor('salmon', 'RGB'),
         ]
         
         self.additional_minutes_index = []
