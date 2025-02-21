@@ -1,0 +1,11 @@
+[Unit]
+Description=Wordclock
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=sudo python3 /home/nico/wordclock/app.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

@@ -43,6 +43,9 @@ class WordClock:
         config = configparser.ConfigParser()
         config.read('settings.conf')
         self.enable_temperature = config.getboolean('temperature', 'enable')
+        if self.enable_temperature:
+            self.temperature_duration = config.getint('temperature', 'duration')
+            self.temperature_repeat = config.getint('temperature', 'repeat')
         
         # Sources
         self.clock = ClockPlugin(DISPLAY_WIDTH, DISPLAY_HEIGHT)
@@ -85,34 +88,33 @@ class WordClock:
     def mainloop(self):
         # Prepare and start loading resources
 
-        # MQTT
-        client = mqtt.Client()
-        client.on_connect = self.on_mqtt_connect
-        client.on_message = self.on_mqtt_message
-        client.connect('localhost')
-        client.loop_start()
+        # MQTT (disabled)
+        # client = mqtt.Client()
+        # client.on_connect = self.on_mqtt_connect
+        # client.on_message = self.on_mqtt_message
+        # client.connect('localhost')
+        # client.loop_start()
 
         # Timer
         clock = pygame.time.Clock()
         
         start = 0
-        flag = True
+        end = time.time()
+        src = 'c'
 
         while True:
             if self.enable_temperature:
-                minutes = datetime.datetime.now().time().minute
+                t = time.time()
             
-                if minutes % 2 == 0 and start == 0 and flag:
-                    start = time.time()
+                if t - end > self.temperature_repeat and src == 'c':
+                    start = t
                     self.source = self.temperature
+                    src = 't'
                 
-                if start > 0 and time.time() - start > 10:
-                    start = 0
-                    flag = False
+                if t - start > self.temperature_duration and src == 't':
+                    end = t
                     self.source = self.clock
-                
-                if minutes % 2 == 1:
-                    flag = True
+                    src = 'c'
             
             # Limit CPU usage do not go faster than FPS
             dt = clock.tick(self.source.fps)

@@ -64,4 +64,5 @@ The topics are tied to specific plugins or core modules.
 1. Do not forget to disable audio ! (as in the second link on NeoPixel library)
 1. Install a MQTT server on the Raspberry (mosquitto for instance)
 1. Setup your `settings.conf`
+1. Install the unit files in `systemd` (edit the path accordingly)
 1. You can run the script with `python3 app.py`, or add it as a service (see [here](https://gist.github.com/emxsys/a507f3cad928e66f6410e7ac28e2990f))

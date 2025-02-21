@@ -1,0 +1,12 @@
+[Unit]
+Description=Wordclock shutdown
+Before=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/bin/true
+ExecStop=sudo python3 /home/nico/wordclock/shutdown.py
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
